@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Express 2012 for Windows Desktop
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "guiTest", "guiTest\guiTest.vcxproj", "{51EBA30C-BB09-4800-990D-6FAB0DF035A1}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hooker", "hooker\hooker.vcxproj", "{DC309EC0-2BB0-4C99-892A-12B74ECCEB71}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "inject", "inject\inject.vcxproj", "{41A6D8B3-A739-41F0-84D3-EB09D385FEFA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{51EBA30C-BB09-4800-990D-6FAB0DF035A1}.Debug|Win32.ActiveCfg = Debug|Win32
+		{51EBA30C-BB09-4800-990D-6FAB0DF035A1}.Debug|Win32.Build.0 = Debug|Win32
+		{51EBA30C-BB09-4800-990D-6FAB0DF035A1}.Release|Win32.ActiveCfg = Release|Win32
+		{51EBA30C-BB09-4800-990D-6FAB0DF035A1}.Release|Win32.Build.0 = Release|Win32
+		{DC309EC0-2BB0-4C99-892A-12B74ECCEB71}.Debug|Win32.ActiveCfg = Debug|Win32
+		{DC309EC0-2BB0-4C99-892A-12B74ECCEB71}.Debug|Win32.Build.0 = Debug|Win32
+		{DC309EC0-2BB0-4C99-892A-12B74ECCEB71}.Release|Win32.ActiveCfg = Release|Win32
+		{DC309EC0-2BB0-4C99-892A-12B74ECCEB71}.Release|Win32.Build.0 = Release|Win32
+		{41A6D8B3-A739-41F0-84D3-EB09D385FEFA}.Debug|Win32.ActiveCfg = Debug|Win32
+		{41A6D8B3-A739-41F0-84D3-EB09D385FEFA}.Debug|Win32.Build.0 = Debug|Win32
+		{41A6D8B3-A739-41F0-84D3-EB09D385FEFA}.Release|Win32.ActiveCfg = Release|Win32
+		{41A6D8B3-A739-41F0-84D3-EB09D385FEFA}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
