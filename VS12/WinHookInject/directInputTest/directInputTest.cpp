@@ -1,4 +1,5 @@
 // code taken from http://www.directxtutorial.com/tutorial9/e-directinput/dx9E1.aspx#still
+#define DIRECTINPUT_VERSION 0x0800
 
 // include the necessary header files
 #include <windows.h>
@@ -6,6 +7,7 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 #include <dinput.h>
+
 
 // define the screen resolution and keyboard macros
 #define SCREEN_WIDTH 800
@@ -41,12 +43,17 @@ void cleanDInput(void);    // closes DirectInput and releases memory
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 
+void myFunc(void) {
+	OutputDebugString(L"In myFunc!");
+}
+
 // the entry point for any Windows program
 int WINAPI WinMain(HINSTANCE hInstance,
                    HINSTANCE hPrevInstance,
                    LPSTR lpCmdLine,
                    int nCmdShow)
 {
+	myFunc();
     HWND hWnd;
     WNDCLASSEX wc;
 

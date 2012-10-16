@@ -1,0 +1,17 @@
+DirectX and DirectInput
+directInputTest - simple directx program, has basic init functions and one function (myFunc) that could be called for testing 
+injectionFunctioncall - a dll that will call myFunc if injected
+injectDI - hooks some DirectInput function, usefull as an example of pointer chaising, does not actually work
+
+Win32 GUI
+guiTest - default VS12 gui project
+launcher - a simple dialog based executable launcher example
+inject - hooks MessageBoxA with memory manipulation
+injectDetours - hooks MessageBoxA with Detours
+
+
+
+Injectors
+injector - LoadLibrary, createRemoteThread type injector
+hookerDI - uses Detours to start and inject a dll
+

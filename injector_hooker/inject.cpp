@@ -77,7 +77,7 @@ void BeginRedirect(LPVOID newFunction)
 int  WINAPI MyMessageBoxA(HWND hWnd, LPTSTR lpText, LPTSTR lpCaption, UINT uiType)
 {
     OutputDebugString("In MyMessageBoxA");
-    lpCaption = "Hooked!";
+    //lpCaption = "Hooked!";
     // unhook
     VirtualProtect((LPVOID)pOrigMBAddress, SIZE, myProtect, NULL);
     memcpy((LPVOID)pOrigMBAddress, oldBytes, SIZE);

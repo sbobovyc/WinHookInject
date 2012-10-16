@@ -1,11 +1,13 @@
 CC = g++
 CFLAGS = -O0 -ggdb
+LIBS = -nostartfiles -nodefaultlibs -nostdlib -fno-builtin -lkernel32
 all: libs bins
 
 libs:
 	${CC} ${CFLAGS} -c inject.cpp
 	#${CC} -shared -o inject.dll inject.o -Wl,--out-implib,inject.a
-	${CC} -shared -o inject.dll inject.o 
+	${CC} -Wl,--enable-stdcall-fixup -shared -o inject.dll inject.o 
+	#${CC} -mdll ${LIBS} -e _DllMain -o inject.dll inject.o 
 	${CC} ${CFLAGS} -c libutils.cpp
 	#${CC} -shared -o libutils.dll libutils.o -Wl,--out-implib,libutils.a
 	${CC} -shared -o libutils.dll libutils.o 

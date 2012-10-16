@@ -3,11 +3,15 @@
 
 #include <windows.h>
 
-#define DllImport   __declspec( dllimport )
-#define DllExport   __declspec( dllexport )
+#ifdef BUILD_DLL
+    #define DllExport __declspec(dllexport)
+#else
+    #define DllExport __declspec(dllimport)
+#endif
 
 #ifdef __cplusplus
-extern "C" {
+extern "C" 
+{
 #endif
 DllExport void test();
 

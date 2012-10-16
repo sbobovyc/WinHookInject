@@ -1,6 +1,8 @@
 //http://www.rohitab.com/discuss/topic/34411-run-time-directx-hooking-using-code-injection-and-vtable/
 // dllmain.cpp : Defines the entry point for the DLL application.
 #include "stdafx.h"
+
+
 #ifndef __cplusplus
 extern "C" {
 #endif
@@ -28,10 +30,8 @@ BOOL WINAPI DllMain(HINSTANCE hinst, DWORD dwReason, LPVOID reserved) {
 
 		DetourTransactionBegin();
 		DetourUpdateThread(GetCurrentThread());		
-		sprintf_s(buffer, 100, "%x", oldDirectInput8Create);
-		OutputDebugString(buffer);
 		oldDirectInput8Create = (HRESULT(WINAPI *)(HINSTANCE hinst, DWORD dwVersion, REFIID riidltf, LPVOID * ppvOut, LPUNKNOWN punkOuter))DetourFindFunction("dinput8.dll", "DirectInput8Create");
-		sprintf_s(buffer, 100, "%x", oldDirectInput8Create);
+		sprintf_s(buffer, 100, "DirectInput8Create at %x", oldDirectInput8Create);
 		OutputDebugString(buffer);
 		if(oldDirectInput8Create == NULL)
 			OutputDebugString("Failed to find function");
