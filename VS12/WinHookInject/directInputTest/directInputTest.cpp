@@ -42,6 +42,11 @@ void cleanDInput(void);    // closes DirectInput and releases memory
 // the WindowProc function prototype
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
+typedef struct myStruct {
+	int member0;
+	int member1;
+	float member2;
+}myStruct;
 
 void myFunc(void) {
 	OutputDebugString(L"In myFunc!");
@@ -54,6 +59,11 @@ int WINAPI WinMain(HINSTANCE hInstance,
                    int nCmdShow)
 {
 	myFunc();
+	myStruct * stuctPtr = new myStruct;
+	stuctPtr->member0 = 0xBEEF;
+	stuctPtr->member1 = 0xDEAD;
+	stuctPtr->member2 = 10.0;
+
     HWND hWnd;
     WNDCLASSEX wc;
 
@@ -110,6 +120,8 @@ int WINAPI WinMain(HINSTANCE hInstance,
 			OutputDebugString(L"A key\n");
 		}
     }
+	// clean up struct
+	delete stuctPtr;
 
     // clean up DirectX and COM
     cleanD3D();
