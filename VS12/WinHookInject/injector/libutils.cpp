@@ -5,6 +5,8 @@
 
 #include "libutils.h"
 
+#pragma comment(lib,"shlwapi.lib")
+
 bool IsWindowsNT()
 {
     // check current version of Windows
