@@ -12,6 +12,7 @@ injectDetours - hooks MessageBoxA with Detours
 
 
 Injectors
-injector - LoadLibrary, createRemoteThread type injector
-hookerDI - uses Detours to start and inject a dll
+injector - C++, LoadLibrary, createRemoteThread type injector
+hookerDI - C++, uses Detours to start and inject a dll
+DllInjector - C#, LoadLibrary, createRemoteThread type injector
 
