@@ -4,8 +4,8 @@
  *  Created on: Jul 10, 2014
  *      Author: sbobovyc
  */
-// http://www.unknowncheats.me/forum/payday-2/98555-quick-script-dump-_g.html
-// http://code.google.com/p/zester/wiki/Lua_C
+
+// How to call function from lua: http://code.google.com/p/zester/wiki/Lua_C
 
 #include <iostream>
 #include <stdio.h>
@@ -18,9 +18,10 @@ extern "C" {
 #include <lauxlib.h>
 #include <lualib.h>
 }
+#ifdef DLL_LINKED
 #include "loadable.hpp"
-
 extern int luaopen_libloadable(lua_State* l);
+#endif
 
 
 static int internal_function_1(lua_State* l) {
@@ -65,6 +66,10 @@ int main(void) {
 	printf("This is the address of luaL_loadbufferx: 0x%p\n", luaL_loadbufferx);
 	printf("This is the address of lua_pcallk: 0x%p\n", lua_pcallk);
 
+	FILE * fstate = fopen("luastate", "w");
+	fprintf(fstate, "%i", (int)L);
+	fclose(fstate);
+
 	error = luaL_dostring(L, "print(\"[Exe] This is a dostring print\")");
 	if(error) {
 		lua_error_handler(L,"%s", lua_tostring(L, -1));
@@ -72,14 +77,16 @@ int main(void) {
 
 	// register functions in exe
 	register_internal_functions(L);
+
+	#ifdef DLL_LINKED
 	// register functions in dll
 	luaopen_libloadable(L);
-
-	error = luaL_dofile(L, "use_loadable_internal.lua");
+	error = luaL_dofile(L, "use_loadable.lua");
 	if(error) {
 		fprintf(stderr, "%s", lua_tostring(L, -1));
 		lua_pop(L, 1); /* pop error message from the stack */
 	}
+	#endif
 
 	error = luaL_dofile(L, "use_internal.lua");
 	if(error) {
@@ -87,7 +94,8 @@ int main(void) {
 		lua_pop(L, 1); /* pop error message from the stack */
 	}
 
-	error = luaL_dofile(L, "dump_global_state.lua");
+	//This function should be executed by the DLL, this is only for testing
+	//error = luaL_dofile(L, "dump_global_state.lua");
 
 	while (fgets(buff, sizeof(buff), stdin) != NULL) {
 		error = luaL_loadbuffer(L, buff, strlen(buff),

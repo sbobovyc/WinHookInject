@@ -17,18 +17,6 @@ DWORD g_threadID;
 HINSTANCE g_hModule;
 DWORD WINAPI MyThread(LPVOID);
 
-uintptr_t luaL_newstate_return = 0x00405CBE;
-uintptr_t luaL_newstate_func = 0x00405C90;
-
-
-
-#define JMP 0xE9
-#define NOP 0x90
-
-void  myLuaNewstateReturnHook(void) {
-
-}
-
 static void stackDump (lua_State *L) {
   int i;
   int top = lua_gettop(L);
@@ -56,20 +44,6 @@ static void stackDump (lua_State *L) {
     printf("  ");  /* put a separator */
   }
   printf("\n");  /* end the listing */
-}
-
-void returnHook(void * returnAddress, void * hookAddress) {
-	DWORD oldProtection;
-	VirtualProtect(returnAddress, 6, PAGE_EXECUTE_READWRITE, &oldProtection);
-	DWORD JMPSize = ((DWORD)hookAddress - (DWORD)returnAddress - 5);
-	BYTE JMP_hook[6] = {JMP, NOP, NOP, NOP, NOP, NOP};
-	memcpy(&JMP_hook[1], &JMPSize, 4);
-	//wsprintf(buf, "JMP: %x%x%x%x%x", JMP[0], JMP[1], JMP[2], JMP[3], JMP[4], JMP[5]);
-	//OutputDebugString(debugStrBuf);
-	// overwrite retn with JMP_hook
-	memcpy((void *)returnAddress, (void *)JMP_hook, 6);
-	// restore protection
-	VirtualProtect((LPVOID)returnAddress, 6, oldProtection, NULL);
 }
 
 BOOL WINAPI DllMain (HINSTANCE hDll, DWORD dwReason, LPVOID lpReserved) {
@@ -100,19 +74,28 @@ BOOL WINAPI DllMain (HINSTANCE hDll, DWORD dwReason, LPVOID lpReserved) {
 
 DWORD WINAPI MyThread(LPVOID)
 {
+	lua_State *L;
 	OutputDebugStr("This is in the injected dll");
-	// hook luaL_newstate
-	lua_State *L = (lua_State *)0x3715B0;
+	FILE * fstate = fopen("luastate", "r");
+	char filebuff[255];
+		 /* get a line, up to 80 chars from fr.  done if NULL */
+	if(fgets(filebuff, 80, fstate) != NULL) {
+		// hook luaL_newstate
+		 L = (lua_State *)atoi(filebuff);
+	} else {
+		OutputDebugStr("Failed to read file");
+		FreeLibraryAndExitThread(g_hModule, 0);
+		return 0;
+	}
+
+
+
     char buff[] = "print(\"[Injected Dll] This is from the injected dll!\")";
     int error = luaL_dostring(L, buff);
-	//int status = loadfile(L, "C:\\Users\\sbobovyc\\workspace\\lua_testing\\Debug\\filetest.lua", NULL) || lua_pcallk(L, 0, LUA_MULTRET, 0, 0, NULL);
-    //int status = luaL_loadbuffer(L, buff, strlen(buff), "line", "r") || lua_pcall(L, 0, 0, 0);
-    //int status = luaL_dofile(L, "C:\\Users\\sbobovyc\\workspace\\WinHookInject\\lua_experiments\\lua_simple_app\\dump_global_state.lua");
 	if(error) {
 		fprintf(stderr, "%s", lua_tostring(L, -1));
 		lua_pop(L, 1); /* pop error message from the stack */
 	}
-	error = luaL_dofile(L, "C:\\Users\\sbobovyc\\workspace\\WinHookInject\\lua_experiments\\lua_simple_app\\print_test.lua");
 	error = luaL_dofile(L, "C:\\Users\\sbobovyc\\workspace\\WinHookInject\\lua_experiments\\lua_simple_app\\dump_global_state.lua");
 	if(error) {
 		fprintf(stderr, "%s", lua_tostring(L, -1));
@@ -120,7 +103,6 @@ DWORD WINAPI MyThread(LPVOID)
 	}
     OutputDebugStr("This is after lua call");
 
-	//returnHook((void *)luaL_newstate_return, (void *)myLuaNewstateReturnHook);
     while(1);
 	FreeLibraryAndExitThread(g_hModule, 0);
 	return 0;
