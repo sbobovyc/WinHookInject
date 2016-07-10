@@ -12,6 +12,9 @@ void DisplayError(LPTSTR lpszFunction);
 void createFile(void) {
 	FILE * pFile;
 	char buffer [BUFFERSIZE];
+	for(int i = 0; i < BUFFERSIZE; i++) {
+		buffer[i] = i;
+	}
 	pFile = fopen (FILENAME_A, "wb");
 	if (pFile == NULL) perror ("Error opening file");
 	else
@@ -28,7 +31,8 @@ int main(int argc, _TCHAR* argv[])
 	DWORD junk     = 0;                     // discard results
 	DISK_GEOMETRY pdg = { 0 }; // disk drive geometry structure
 	TCHAR fileName[] = FILENAME_W;
-	char   ReadBuffer[BUFFERSIZE] = {0};
+	char   ReadBuffer1[BUFFERSIZE] = {0};
+	char   ReadBuffer2[BUFFERSIZE] = {0};
 	DWORD  bytesRead;
 	
 	createFile();
@@ -56,7 +60,7 @@ int main(int argc, _TCHAR* argv[])
                             &junk,                         // # bytes returned
                             (LPOVERLAPPED) NULL);          // synchronous I/O
 
-	if( FALSE == ReadFile(hFile, ReadBuffer, BUFFERSIZE, &bytesRead, NULL) )
+	if( FALSE == ReadFile(hFile, ReadBuffer1, BUFFERSIZE, &bytesRead, NULL) )
     {
         DisplayError(TEXT("ReadFile"));
         printf("Terminal failure: Unable to read from file.\n GetLastError=%08x\n", GetLastError());
@@ -64,8 +68,22 @@ int main(int argc, _TCHAR* argv[])
         return 1;
     }
 
+	if( FALSE == SetFilePointer(hFile, 0xFF, NULL, FILE_BEGIN) )
+    {
+        DisplayError(TEXT("SetFilePointer"));
+        printf("Terminal failure: Unable to read from file.\n GetLastError=%08x\n", GetLastError());
+        CloseHandle(hFile);
+        return 1;
+    }
 
-   
+	if( FALSE == ReadFile(hFile, ReadBuffer2, BUFFERSIZE/3, &bytesRead, NULL) )
+    {
+        DisplayError(TEXT("ReadFile"));
+        printf("Terminal failure: Unable to read from file.\n GetLastError=%08x\n", GetLastError());
+        CloseHandle(hFile);
+        return 1;
+    }
+
 	return 0;
 }
 
